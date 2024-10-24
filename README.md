@@ -14,6 +14,6 @@ My personal setup for the Precision 7780 [WIP]
 
 As of this writing, the Micron 3500 are the only client SSDs advertising [firmware verification](https://www.micron.com/content/dam/micron/global/public/documents/products/product-flyer/micron-ssd-secure-foundation-flyer.pdf). I am not sure how secure the implementation is, but I guess it is better than nothing.
 
-There are other enterprise SSDs from Micron with firmware verification as well, but I am not using them here due to heat and power constraints.
+There are other enterprise SSDs from Micron with firmware verification, but I am not using them here due to heat and power constraints.
 
-Unlike the likes of WD and Samsung who make life extremely difficult unless you buy an OEM drive, Micron provides firmware updates on their website and also includes an update utility for Linux: https://www.micron.com/products/storage/ssd/micron-ssd-firmware#accordion-e6c186b05b-item-2ebc81f38a. There is no need to look for a Dell or Lenovo version of the drive to get updates via LVFS.
+Unlike the likes of WD and Samsung who make life extremely difficult unless you buy an OEM drive, Micron [provides firmware updates on their website and also includes an update utility for Linux](https://www.micron.com/products/storage/ssd/micron-ssd-firmware#accordion-e6c186b05b-item-2ebc81f38a). There is no need to look for a Dell or Lenovo version of the drive to get updates via LVFS.
