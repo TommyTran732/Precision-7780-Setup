@@ -2,13 +2,13 @@
 My personal setup for the Precision 7780 [WIP]
 
 ## Hardware
-**CPU**: Intel® Core™ i9-13950HX Processor
-**GPU**: NVIDIA GeForce RTX 4090 Mobile
-**RAM**: 2x Micron 32GB DDR5-5600 ECC (MTC20C2085S1TC56BD1R)
-**Drive 1**: Micron 3500 2TB (MTFDKBA2T0TGD-1BK1AABYYR)
-**Drive 2**: Micron 3500 1TB (MTFDKBA1T0TGD-1BK1AABYYR)
-**Drive 3**: Micron 3500 1TB (MTFDKBA1T0TGD-1BK1AABYYR)
-**Drive 4**: Micron 3500 1TB (MTFDKBA1T0TGD-1BK1AABYYR)
+- **CPU**: Intel® Core™ i9-13950HX Processor
+- **GPU**: NVIDIA GeForce RTX 4090 Mobile
+- **RAM**: 2x Micron 32GB DDR5-5600 ECC (MTC20C2085S1TC56BD1R)
+- **Drive 1**: Micron 3500 2TB (MTFDKBA2T0TGD-1BK1AABYYR)
+- **Drive 2**: Micron 3500 1TB (MTFDKBA1T0TGD-1BK1AABYYR)
+- **Drive 3**: Micron 3500 1TB (MTFDKBA1T0TGD-1BK1AABYYR)
+- **Drive 4**: Micron 3500 1TB (MTFDKBA1T0TGD-1BK1AABYYR)
 
 **Notes**: 
 
