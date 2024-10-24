@@ -17,3 +17,16 @@ As of this writing, the Micron 3500 are the only client SSDs advertising [firmwa
 There are other enterprise SSDs from Micron with firmware verification, but I am not using them here due to heat and power constraints.
 
 Unlike the likes of WD and Samsung who make life extremely difficult unless you buy an OEM drive, Micron [provides firmware updates on their website and also includes an update utility for Linux](https://www.micron.com/products/storage/ssd/micron-ssd-firmware#accordion-e6c186b05b-item-2ebc81f38a). There is no need to look for a Dell or Lenovo version of the drive to get updates via LVFS.
+
+## Partition layout
+
+/dev/nvme0n1p1 -> /boot/efi
+/dev/nvme0n1p2 -> /boot/tpm -> XFS, stores the LUKS passphrase for /dev/nvme0n1p4. Unlocked with TPM attestation.
+/dev/nvme0n1p3 -> /boot/fido2 -> XFS, stores the LUKS header for /dev/nvme0n1p4. Unlocked with with FIDO2.
+/dev/nvme0n1p4 -> / -> XFS, the actual OS.
+
+vpool/images -> /var/lib/libvirt/images -> ZFS RAIDZ1 dataset.
+
+## Host OS
+
+I am using Arch Linux, mostly because it is easier to get a setup with sbctl + uki + custom partitioning with it. I will consider switching to Fedora + Kickstart once they have finalized their UKI setup.
