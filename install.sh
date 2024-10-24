@@ -88,3 +88,26 @@ user_password_prompt () {
         user_password_prompt
     fi
 }
+
+luks_password_prompt
+disk_prompt
+username_prompt
+fullname_prompt
+user_password_prompt
+
+hostname=localhost
+locale=en_US
+kblayout=us
+
+## Installing curl
+pacman -S --noconfirm curl
+
+## Wipe the disk
+sgdisk --zap-all "${disk}"
+
+## Creating a new partition scheme.
+output "Creating new partition scheme on ${disk}."
+sgdisk -g "${disk}"
+sgdisk -I -n 1:0:+512M -t 1:ef00 -c 1:'ESP' "${disk}"
+sgdisk -I -n 2:0:+1M -c 2:'tpm_unlock' "${disk}"
+sgdisk -I -n 3:0:+1M -c 3:'fido2_unlock' "${disk}"
