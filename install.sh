@@ -158,9 +158,9 @@ mkfs.xfs -f "${rootfs}"
 mount "${rootfs}" /mnt
 mkdir -p /mnt/{boot/efi,passphrase,header}
 mount -o nodev,nosuid,noexec "${ESP}" /mnt/boot/efi
+mkdir -p /mnt/boot/efi/EFI/BOOT
 mount -o nodev,nosuid,noexec "${passphrase}" /mnt/passphrase
 mount -o nodev,nosuid,noexec "${header}" /mnt/header
-mkdir -p /boot/efi/EFI/BOOT
 
 ## Save header and passphrase
 mv .header.img /mnt/header
@@ -209,11 +209,11 @@ sed -i 's/^MODULES=.*/MODULES=(xfs)/g' /mnt/etc/mkinitcpio.conf
 sed -i 's/^HOOKS=.*/HOOKS=(systemd autodetect microcode modconf keyboard sd-vconsole block sd-encrypt)/g' /mnt/etc/mkinitcpio.conf
 
 ## Configure mkinitcpio presets
-sed -i 's/PRESET/#PRESET/g' /mnt/etc/mkinitcpio.d/linux-hardened.preset
+sed -i 's/PRESETS/#PRESETS/g' /mnt/etc/mkinitcpio.d/linux-hardened.preset
 sed -i 's/default_image/#default_image/g' /mnt/etc/mkinitcpio.d/linux-hardened.preset
 sed -i 's/fallback_image/#fallback_image/g' /mnt/etc/mkinitcpio.d/linux-hardened.preset
 echo '
-PRESET=('\''default'\'')
+PRESETS=('\''default'\'')
 default_uki="/boot/efi/EFI/BOOT/BOOTX64.efi"' >> /mnt/etc/mkinitcpio.d/linux-hardened.preset
 
 ## Configure /etc/crypttab.initramfs
@@ -222,9 +222,9 @@ cryptheadUUID=$(blkid -s UUID -o value "${crypthead}")
 cryptrootUUID=$(blkid -s UUID -o value "${cryptroot}")
 headerUUID=$(blkid -s UUID -o value "${header}")
 
-echo 'cryptpass    "${cryptpassUUID}"    none    luks
-crypthead    "${cryptheadUUID}"    none    luks
-cryptroot    "${cryptrootUUID}"    none    luks,header=.header.img:UUID="${headerUUID}"' > /mnt/etc/crypttab.initramfs
+echo "cryptpass    ${cryptpassUUID}    none    luks
+crypthead    ${cryptheadUUID}    none    luks
+cryptroot    ${cryptrootUUID}    none    luks,header=.header.img:UUID=${headerUUID}" > /mnt/etc/crypttab.initramfs
 
 ## Kernel hardening
 mkdir -p /mnt/etc/cmdline.d/
