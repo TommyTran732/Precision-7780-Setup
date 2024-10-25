@@ -145,6 +145,10 @@ output 'Creating LUKS Container for the root partition.'
 echo -n "${luks_passphrase}" | cryptsetup luksFormat "${cryptroot}" --header .header.img -d -
 echo -n "${luks_passphrase}" | cryptsetup open "${cryptroot}" cryptroot -d -
 
+cryptpass='/dev/mapper/cryptpass'
+crypthead='/dev/mapper/crypthead'
+cryptroot='/dev/mapper/cryptroot'
+
 ## Formatting the partitions
 mkfs.xfs -f "${cryptpass}"
 mkfs.xfs -f "${crypthead}"
