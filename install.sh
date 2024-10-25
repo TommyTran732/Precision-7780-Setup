@@ -220,7 +220,8 @@ default_uki="/boot/efi/EFI/BOOT/BOOTX64.efi"' >> /mnt/etc/mkinitcpio.d/linux-har
 cryptpassUUID=$(blkid -s UUID -o value "${cryptpass}")
 cryptheadUUID=$(blkid -s UUID -o value "${crypthead}")
 cryptrootUUID=$(blkid -s UUID -o value "${cryptroot}")
-headerUUID=$(blkid -s UUID -o value "${header}")
+headerLuksPart=$(blkid | grep rootfs | awk -F : '{ print $1 }')
+headerUUID=$(cryptsetup luksUUID "${headerLuksPart}" --header /header/.header.img)
 
 echo "cryptpass    ${cryptpassUUID}    none    luks
 crypthead    ${cryptheadUUID}    none    luks
