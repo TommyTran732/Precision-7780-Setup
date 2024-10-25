@@ -171,9 +171,6 @@ chmod 000 /mnt/passphrase/.passphrase.txt
 ## Pacstrap
 output 'Installing the base system (it may take a while).'
 
-output "You may see an error when mkinitcpio tries to generate a new initramfs."
-output "It is okay. The script will regenerate the initramfs later in the installation process."
-
 pacstrap /mnt apparmor base chrony efibootmgr firewalld fwupd gdm gnome-console gnome-control-center inotify-tools intel-ucode linux-firmware linux-hardened nano nautilus networkmanager pipewire-alsa pipewire-pulse pipewire-jack reflector sbctl sudo zram-generator
 
 # Configure fwupd
