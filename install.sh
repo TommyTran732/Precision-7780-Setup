@@ -154,7 +154,7 @@ mount "${cryptroot}" /mnt
 mkdir -p /mnt/{boot/efi,passphrase,header}
 mount -o nodev,nosuid,noexec "${ESP}" /mnt/boot/efi
 mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/passphrase
-mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/header
+mount -o nodev,nosuid,noexec "${crypthead}" /mnt/header
 
 ## Save header and passphrase
 mv .header.img /mnt/header
