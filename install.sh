@@ -143,7 +143,7 @@ echo -n "${luks_passphrase}" | cryptsetup open "${crypthead}" crypthead -d -
 
 output 'Creating LUKS Container for the root partition.'
 echo -n "${luks_passphrase}" | cryptsetup luksFormat "${cryptroot}" --header .header.img -d -
-echo -n "${luks_passphrase}" | cryptsetup open "${cryptroot}" cryptroot -d -
+echo -n "${luks_passphrase}" | cryptsetup open "${cryptroot}" cryptroot --header .header.img -d -
 
 cryptpass='/dev/mapper/cryptpass'
 crypthead='/dev/mapper/crypthead'
