@@ -173,7 +173,7 @@ output 'Installing the base system (it may take a while).'
 output "You may see an error when mkinitcpio tries to generate a new initramfs."
 output "It is okay. The script will regenerate the initramfs later in the installation process."
 
-pacstrap /mnt apparmor base chrony efibootmgr firewalld fwupd gdm gnome-console gnome-control-center inotify-tools intel-ucode linux-firmware linux-hardened linux-lts nano nautilus networkmanager pipewire-alsa pipewire-pulse pipewire-jack reflector sbctl sudo zram-generator
+pacstrap /mnt apparmor base chrony efibootmgr firewalld fwupd gdm gnome-console gnome-control-center inotify-tools intel-ucode linux-firmware linux-hardened nano nautilus networkmanager pipewire-alsa pipewire-pulse pipewire-jack reflector sbctl sudo zram-generator
 
 # Configure fwupd
 echo 'UriSchemes=file;https' | sudo tee -a /mnt/etc/fwupd/fwupd.conf
@@ -211,10 +211,7 @@ sed -i 's/^MODULES=.*/MODULES=(xfs)/g' /mnt/etc/mkinitcpio.conf
 sed -i 's/^HOOKS=.*/HOOKS=(systemd autodetect microcode modconf keyboard sd-vconsole block sd-encrypt)/g' /mnt/etc/mkinitcpio.conf
 
 ## Configure mkinitcpio presets
-echo 'default_uki="/boot/efi/linux-hardened.efi"' >> /etc/mkinitcpio.d/linux-hardened.preset
-echo 'fallback_uki="/boot/efi/linux-hardened-fallback.efi"' >> /etc/mkinitcpio.d/linux-hardened-fallback.preset
-echo 'default_uki="/boot/efi/linux-lts.efi"' >> /etc/mkinitcpio.d/linux-lts.preset
-echo 'fallback_uki="/boot/efi/linux-lts-fallback.efi"' >> /etc/mkinitcpio.d/linux-lts-fallback.preset
+echo 'default_uki="/boot/efi/EFI/BOOT/BOOTX64.efi"' >> /etc/mkinitcpio.d/linux-hardened.preset
 
 ## Kernel hardening
 mkdir -p /etc/cmdline.d/
