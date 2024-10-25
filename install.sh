@@ -149,6 +149,7 @@ mkdir -p /mnt/boot/{efi,passphrase,header}
 mount -o nodev,nosuid,noexec "${ESP}" /mnt/boot/efi
 mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/boot/passphrase
 mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/boot/header
+mv header.img /mnt/boot/header
 
 ## Pacstrap
 output 'Installing the base system (it may take a while).'
