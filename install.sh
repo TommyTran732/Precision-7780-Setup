@@ -114,7 +114,7 @@ sgdisk --zap-all "${disk}"
 ## Creating a new partition scheme.
 output "Creating new partition scheme on ${disk}."
 sgdisk -g "${disk}"
-sgdisk -I -n 1:0:+1G -t 1:ef00 -c 1:'ESP' "${disk}"
+sgdisk -I -n 1:0:+512MB -t 1:ef00 -c 1:'ESP' "${disk}"
 ### Need 300M here as it is the minimum allowed by XFS
 sgdisk -I -n 2:0:+300M -c 2:'passphrase' "${disk}"
 sgdisk -I -n 3:0:+300M -c 3:'header' "${disk}"
