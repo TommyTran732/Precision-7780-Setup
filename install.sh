@@ -212,7 +212,12 @@ sed -i 's/^MODULES=.*/MODULES=(xfs)/g' /mnt/etc/mkinitcpio.conf
 sed -i 's/^HOOKS=.*/HOOKS=(systemd autodetect microcode modconf keyboard sd-vconsole block sd-encrypt)/g' /mnt/etc/mkinitcpio.conf
 
 ## Configure mkinitcpio presets
-echo 'default_uki="/boot/efi/EFI/BOOT/BOOTX64.efi"' >> /mnt/etc/mkinitcpio.d/linux-hardened.preset
+sed -i 's/PRESET/#PRESET/g' /mnt/etc/mkinitcpio.d/linux-hardened.preset
+sed -i 's/default_image/#default_image/g' /mnt/etc/mkinitcpio.d/linux-hardened.preset
+sed -i 's/fallback_image/#fallback_image/g' /mnt/etc/mkinitcpio.d/linux-hardened.preset
+echo '
+PRESET=('\''default'\'')
+default_uki="/boot/efi/EFI/BOOT/BOOTX64.efi"' >> /mnt/etc/mkinitcpio.d/linux-hardened.preset
 
 ## Kernel hardening
 mkdir -p /mnt/etc/cmdline.d/
@@ -289,11 +294,10 @@ arch-chroot /mnt /bin/bash -e <<EOF
     locale-gen
 
     # Create SecureBoot keys
-    # This isn't strictly necessary, but linux-hardened preset expects it and mkinitcpio will fail without it
     sbctl create-keys
 
     # Generating a new initramfs
-    chmod 600 /boot/initramfs-linux*
+    rm /boot/initramfs-linux*
     mkinitcpio -P
 
     # Adding user with sudo privilege
