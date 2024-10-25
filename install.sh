@@ -108,6 +108,37 @@ sgdisk --zap-all "${disk}"
 ## Creating a new partition scheme.
 output "Creating new partition scheme on ${disk}."
 sgdisk -g "${disk}"
-sgdisk -I -n 1:0:+512M -t 1:ef00 -c 1:'ESP' "${disk}"
-sgdisk -I -n 2:0:+1M -c 2:'tpm_unlock' "${disk}"
-sgdisk -I -n 3:0:+1M -c 3:'fido2_unlock' "${disk}"
+sgdisk -I -n 1:0:+1G -t 1:ef00 -c 1:'ESP' "${disk}"
+sgdisk -I -n 2:0:+128M -c 2:'passphrase' "${disk}"
+sgdisk -I -n 3:0:+128M -c 3:'header' "${disk}"
+sgdisk -I -n 4:0:0 -c 4:'rootfs' "${disk}"
+
+ESP='/dev/disk/by-partlabel/ESP'
+cryptpass='/dev/disk/by-partlabel/passphrase'
+crypthead='/dev/disk/by-partlabel/header'
+cryptroot='/dev/disk/by-partlabel/rootfs'
+
+## Informing the Kernel of the changes.
+output 'Informing the Kernel about the disk changes.'
+partprobe "${disk}"
+
+## Formatting the ESP as FAT32.
+output 'Formatting the EFI Partition as FAT32.'
+mkfs.fat -F 32 -s 2 "${ESP}"
+
+output 'Creating LUKS Container for the passphrase partition.'
+echo -n "${luks_password}" | cryptsetup luksFormat --integrity "${cryptpass}" -d -
+echo -n "${luks_password}" | cryptsetup open "${cryptpass}" cryptpass -d -
+
+output 'Creating LUKS Container for the header partition.'
+echo -n "${luks_password}" | cryptsetup luksFormat --integrity "${crypthead}" -d -
+echo -n "${luks_password}" | cryptsetup open "${crypthead}" crypthead -d -
+
+output 'Creating LUKS Container for the root partition.'
+echo -n "${luks_password}" | cryptsetup luksFormat --integrity --header header.img "${cryptroot}" -d -
+echo -n "${luks_password}" | cryptsetup open "${cryptroot}" cryptroot -d -
+
+## Formatting the partitions
+mkfs.xfs --force ${cryptpass}
+mkfs.xfs --force ${crypthead}
+mkfs.xfs --force ${cryptroot}
