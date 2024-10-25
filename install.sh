@@ -312,11 +312,8 @@ systemctl enable chronyd --root=/mnt
 systemctl enable firewalld --root=/mnt
 systemctl enable fstrim.timer --root=/mnt
 systemctl enable gdm --root=/mnt
-systemctl enable grub-btrfsd.service --root=/mnt
 systemctl enable NetworkManager --root=/mnt
 systemctl enable reflector.timer --root=/mnt
-systemctl enable snapper-timeline.timer --root=/mnt
-systemctl enable snapper-cleanup.timer --root=/mnt
 systemctl enable systemd-oomd --root=/mnt
 systemctl disable systemd-timesyncd --root=/mnt
 
