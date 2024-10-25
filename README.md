@@ -21,8 +21,8 @@ Unlike the likes of WD and Samsung who make life extremely difficult unless you 
 ## Partition layout
 
 - **/dev/nvme0n1p1** -> /boot/efi
-- **/dev/nvme0n1p2** -> /boot/passphrase -> LUKS passphrase for /dev/nvme0n1p4. Needs TPM attestation to unlock.
-- **/dev/nvme0n1p3** -> /boot/header -> LUKS header for /dev/nvme0n1p4. Needs FIDO2 to unlock.
+- **/dev/nvme0n1p2** -> /passphrase -> LUKS passphrase for /dev/nvme0n1p4. Needs TPM attestation to unlock.
+- **/dev/nvme0n1p3** -> /header -> LUKS header for /dev/nvme0n1p4. Needs FIDO2 to unlock.
 - **/dev/nvme0n1p4** -> /
 - **vpool/images** -> /var/lib/libvirt/images
 

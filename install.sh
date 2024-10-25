@@ -24,6 +24,23 @@ unpriv(){
     sudo -u nobody "$@"
 }
 
+luks_passphrase_prompt () {
+    output 'Enter your encryption passphrase (the password will not be shown on the screen):'
+    read -r -s luks_passphrase
+
+    if [ -z "${luks_passphrase}" ]; then
+        output 'You need to enter a passphrase.'
+        luks_passphrase_prompt
+    fi
+
+    output 'Confirm your encryption passphrase (the passphrase will not be shown on the screen):'
+    read -r -s luks_passphrase2
+    if [ "${luks_passphrase}" != "${luks_passphrase2}" ]; then
+        output 'Passphrases do not match, please try again.'
+        luks_passphrase_prompt
+    fi
+}
+
 disk_prompt (){
     lsblk
     output 'Please select the number of the primary disk (e.g. 1):'
@@ -110,16 +127,16 @@ output 'Formatting the EFI Partition as FAT32.'
 mkfs.fat -F 32 -s 2 "${ESP}"
 
 output 'Creating LUKS Container for the passphrase partition.'
-cryptsetup luksFormat "${cryptpass}" --integrity hmac-sha512 --integrity-no-wipe --hw-opal
-cryptsetup open "${cryptpass}" cryptpass
+echo -n "${luks_passphrase}" | cryptsetup luksFormat "${cryptpass}" --integrity hmac-sha512 --integrity-no-wipe -d -
+echo -n "${luks_passphrase}" | cryptsetup open "${cryptpass}" cryptpass -d -
 
 output 'Creating LUKS Container for the header partition.'
-cryptsetup luksFormat "${crypthead}" --integrity hmac-sha512 --integrity-no-wipe --hw-opal
-cryptsetup open "${crypthead}" crypthead
+echo -n "${luks_passphrase}" | cryptsetup luksFormat "${crypthead}" --integrity hmac-sha512 --integrity-no-wipe -d -
+echo -n "${luks_passphrase}" | cryptsetup open "${crypthead}" crypthead -d -
 
 output 'Creating LUKS Container for the root partition.'
-cryptsetup luksFormat "${cryptroot}" --integrity hmac-sha512 --integrity-no-wipe --header header.img --hw-opal
-cryptsetup open "${cryptroot}" cryptroot
+echo -n "${luks_passphrase}" | cryptsetup luksFormat "${cryptroot}" --integrity hmac-sha512 --integrity-no-wipe --header .header.img -d -
+echo -n "${luks_passphrase}" | cryptsetup open "${cryptroot}" cryptroot -d -
 
 ## Formatting the partitions
 mkfs.xfs -f "${cryptpass}"
@@ -128,14 +145,16 @@ mkfs.xfs -f "${cryptroot}"
 
 ## Mount partitions
 mount "${cryptroot}" /mnt
-mkdir -p /mnt/boot/{efi,passphrase,header}
+mkdir -p /mnt/{boot/efi,passphrase,header}
 mount -o nodev,nosuid,noexec "${ESP}" /mnt/boot/efi
-mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/boot/passphrase
-mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/boot/header
+mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/passphrase
+mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/header
 
 ## Save header and passphrase
-mv header.img /mnt/boot/header
-chmod 400 /mnt/boot/header
+mv .header.img /mnt/header
+chmod 000 /mnt/header/.header.img
+echo "${luks_passphrase}" > /mnt/passphrase/.passphrase.txt
+chmod 000 /mnt/passphrase/.passphrase.txt
 
 ## Pacstrap
 output 'Installing the base system (it may take a while).'
