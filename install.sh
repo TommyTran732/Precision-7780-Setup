@@ -139,6 +139,24 @@ echo -n "${luks_password}" | cryptsetup luksFormat --integrity --header header.i
 echo -n "${luks_password}" | cryptsetup open "${cryptroot}" cryptroot -d -
 
 ## Formatting the partitions
-mkfs.xfs -f ${cryptpass}
-mkfs.xfs -f ${crypthead}
-mkfs.xfs -f ${cryptroot}
+mkfs.xfs -f "${cryptpass}"
+mkfs.xfs -f "${crypthead}"
+mkfs.xfs -f "${cryptroot}"
+
+## Mount partitions
+mount "${cryptroot}" /mnt
+mkdir -p /mnt/boot/{efi,passphrase,header}
+mount -o nodev,nosuid,noexec "${ESP}" /mnt/boot/efi
+mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/boot/passphrase
+mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/boot/header
+
+## Pacstrap
+output 'Installing the base system (it may take a while).'
+
+output "You may see an error when mkinitcpio tries to generate a new initramfs."
+output "It is okay. The script will regenerate the initramfs later in the installation process."
+
+pacstrap /mnt apparmor base chrony efibootmgr firewalld fwupd gdm gnome-console gnome-control-center inotify-tools intel-ucode linux-firmware linux-hardened linux-lts nano nautilus networkmanager pipewire-alsa pipewire-pulse pipewire-jack reflector sbctl sudo zram-generator
+
+# Configure fwupd
+echo 'UriSchemes=file;https' | sudo tee -a /mnt/etc/fwupd/fwupd.conf
