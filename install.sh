@@ -210,6 +210,12 @@ sed -i 's/#COMPRESSION="zstd"/COMPRESSION="zstd"/g' /mnt/etc/mkinitcpio.conf
 sed -i 's/^MODULES=.*/MODULES=(xfs)/g' /mnt/etc/mkinitcpio.conf
 sed -i 's/^HOOKS=.*/HOOKS=(systemd autodetect microcode modconf keyboard sd-vconsole block sd-encrypt)/g' /mnt/etc/mkinitcpio.conf
 
+## Configure mkinitcpio presets
+echo 'default_uki="/boot/efi/linux-hardened.efi' >> /etc/mkinitcpio.d/linux-hardened.preset
+echo 'fallback_uki="/boot/efi/linux-hardened-fallback.efi' >> /etc/mkinitcpio.d/linux-hardened-fallback.preset
+echo 'default_uki="/boot/efi/linux-lts.efi' >> /etc/mkinitcpio.d/linux-lts.preset
+echo 'fallback_uki="/boot/efi/linux-lts-fallback.efi' >> /etc/mkinitcpio.d/linux-lts-fallback.preset
+
 ## Kernel hardening
 mkdir -p /etc/cmdline.d/
 echo 'root="${cryptroot}" ro' > /etc/cmdline.d/root.conf
