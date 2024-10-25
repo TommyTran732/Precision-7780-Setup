@@ -139,6 +139,6 @@ echo -n "${luks_password}" | cryptsetup luksFormat --integrity --header header.i
 echo -n "${luks_password}" | cryptsetup open "${cryptroot}" cryptroot -d -
 
 ## Formatting the partitions
-mkfs.xfs --force ${cryptpass}
-mkfs.xfs --force ${crypthead}
-mkfs.xfs --force ${cryptroot}
+mkfs.xfs -f ${cryptpass}
+mkfs.xfs -f ${crypthead}
+mkfs.xfs -f ${cryptroot}
