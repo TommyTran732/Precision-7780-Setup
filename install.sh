@@ -145,21 +145,21 @@ output 'Creating LUKS Container for the root partition.'
 echo -n "${luks_passphrase}" | cryptsetup luksFormat "${cryptroot}" --header .header.img -d -
 echo -n "${luks_passphrase}" | cryptsetup open "${cryptroot}" cryptroot --header .header.img -d -
 
-cryptpass='/dev/mapper/cryptpass'
-crypthead='/dev/mapper/crypthead'
-cryptroot='/dev/mapper/cryptroot'
+passphrase='/dev/mapper/cryptpass'
+header='/dev/mapper/crypthead'
+rootfs='/dev/mapper/cryptroot'
 
 ## Formatting the partitions
-mkfs.xfs -f "${cryptpass}"
-mkfs.xfs -f "${crypthead}"
-mkfs.xfs -f "${cryptroot}"
+mkfs.xfs -f "${passphrase}"
+mkfs.xfs -f "${header}"
+mkfs.xfs -f "${rootfs}"
 
 ## Mount partitions
 mount "${cryptroot}" /mnt
 mkdir -p /mnt/{boot/efi,passphrase,header}
 mount -o nodev,nosuid,noexec "${ESP}" /mnt/boot/efi
-mount -o nodev,nosuid,noexec "${cryptpass}" /mnt/passphrase
-mount -o nodev,nosuid,noexec "${crypthead}" /mnt/header
+mount -o nodev,nosuid,noexec "${passphrase}" /mnt/passphrase
+mount -o nodev,nosuid,noexec "${header}" /mnt/header
 mkdir -p /boot/efi/EFI/BOOT
 
 ## Save header and passphrase
@@ -215,6 +215,16 @@ sed -i 's/fallback_image/#fallback_image/g' /mnt/etc/mkinitcpio.d/linux-hardened
 echo '
 PRESET=('\''default'\'')
 default_uki="/boot/efi/EFI/BOOT/BOOTX64.efi"' >> /mnt/etc/mkinitcpio.d/linux-hardened.preset
+
+## Configure /etc/crypttab.initramfs
+cryptpassUUID=$(blkid -s UUID -o value "${cryptpass}")
+cryptheadUUID=$(blkid -s UUID -o value "${crypthead}")
+cryptrootUUID=$(blkid -s UUID -o value "${cryptroot}")
+headerUUID=$(blkid -s UUID -o value "${header}")
+
+echo 'cryptpass    "${cryptpassUUID}"    none    luks
+crypthead    "${cryptheadUUID}"    none    luks
+cryptroot    "${cryptrootUUID}"    none    luks,header=.header.img:UUID="${headerUUID}"' > /mnt/etc/crypttab.initramfs
 
 ## Kernel hardening
 mkdir -p /mnt/etc/cmdline.d/
