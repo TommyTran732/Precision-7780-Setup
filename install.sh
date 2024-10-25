@@ -155,7 +155,7 @@ mkfs.xfs -f "${header}"
 mkfs.xfs -f "${rootfs}"
 
 ## Mount partitions
-mount "${cryptroot}" /mnt
+mount "${rootfs}" /mnt
 mkdir -p /mnt/{boot/efi,passphrase,header}
 mount -o nodev,nosuid,noexec "${ESP}" /mnt/boot/efi
 mount -o nodev,nosuid,noexec "${passphrase}" /mnt/passphrase
