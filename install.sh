@@ -212,8 +212,7 @@ sed -i 's/^HOOKS=.*/HOOKS=(systemd autodetect microcode modconf keyboard sd-vcon
 
 ## Kernel hardening
 mkdir -p /etc/cmdline.d/
-UUID=$(blkid -s UUID -o value "${cryptroot}")
-echo 'root=UUID="${UUID}" ro' > /etc/cmdline.d/root.conf
+echo 'root="${cryptroot}" ro' > /etc/cmdline.d/root.conf
 echo 'lsm=landlock,lockdown,yama,integrity,apparmor,bpf mitigations=auto,nosmt spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret gather_data_sampling=force reg_file_data_sampling=on random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off lockdown=confidentiality' > /etc/cmdline.d/security.conf
 
 ## Continue kernel hardening
