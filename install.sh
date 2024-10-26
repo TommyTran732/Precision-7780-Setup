@@ -219,9 +219,9 @@ default_uki="/boot/efi/EFI/BOOT/BOOTX64.efi"' >> /mnt/etc/mkinitcpio.d/linux-har
 ## Configure /etc/crypttab.initramfs
 cryptpassUUID=$(blkid -s UUID -o value "${cryptpass}")
 cryptheadUUID=$(blkid -s UUID -o value "${crypthead}")
-cryptrootUUID=$(blkid -s UUID -o value "${cryptroot}")
-headerLuksPart=$(blkid | grep rootfs | awk -F : '{ print $1 }')
-headerUUID=$(cryptsetup luksUUID "${headerLuksPart}" --header /header/.header.img)
+cryptrootPart=$(blkid | grep rootfs | awk -F : '{ print $1 }')
+cryptrootUUID=$(cryptsetup luksUUID "${cryptrootPart}" --header /header/.header.img)
+headerUUID=$(blkid -s UUID -o value "${header}")
 
 echo "cryptpass    ${cryptpassUUID}    none    luks
 crypthead    ${cryptheadUUID}    none    luks
