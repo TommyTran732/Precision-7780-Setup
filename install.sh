@@ -225,7 +225,7 @@ headerUUID=$(blkid -s UUID -o value "${header}")
 
 echo "cryptpass    ${cryptpassUUID}    none    luks
 crypthead    ${cryptheadUUID}    none    luks
-cryptroot    ${cryptrootUUID}    none    luks,header=.header.img:UUID=${headerUUID}" > /mnt/etc/crypttab.initramfs
+cryptroot    ${cryptrootUUID}    none    luks,header=/.header.img:UUID=${headerUUID}" > /mnt/etc/crypttab.initramfs
 
 ## Kernel hardening
 mkdir -p /mnt/etc/cmdline.d/
